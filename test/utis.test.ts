@@ -32,7 +32,7 @@ describe('capitalize', () => {
 });
 
 describe('isEven', () => {
-  it('should return true if number is isEven', () => {
+  it('should return true if number is even', () => {
     expect(isEven(0)).toBe(true);
     expect(isEven(2)).toBe(true);
     expect(isEven(10)).toBe(true);
