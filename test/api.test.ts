@@ -1,7 +1,11 @@
-import { describe, expect, it, vi } from 'vitest';
-import { fetchUser, User } from '../src/api';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { fetchUser, fetchUsers, User } from '../src/api';
 
 globalThis.fetch = vi.fn();
+
+beforeEach(() => {
+  vi.clearAllMocks();
+});
 
 describe('fetchUser', () => {
   it('should return a user when response is ok', async () => {
@@ -24,5 +28,24 @@ describe('fetchUser', () => {
     } as Response);
 
     await expect(fetchUser(1)).rejects.toThrow(/not found: 1/i);
+  });
+});
+
+describe('fetchUsers', () => {
+  it('should return array of users', async () => {
+    const mockUsers: User[] = [
+      { id: 1, name: 'Alireza', email: 'alireza@gmail.com' },
+      { id: 2, name: 'Sara', email: 'sara@gmail.com' },
+    ];
+
+    vi.mocked(globalThis.fetch).mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockUsers,
+    } as Response);
+
+    const users = await fetchUsers();
+
+    expect(users).toEqual(mockUsers);
+    expect(users).toHaveLength(2);
   });
 });
