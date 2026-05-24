@@ -16,4 +16,13 @@ describe('fetchUser', () => {
 
     expect(user).toEqual(mockUser);
   });
+
+  it('should throw an error when response is not ok', async () => {
+    vi.mocked(globalThis.fetch).mockResolvedValueOnce({
+      ok: false,
+      json: async () => undefined,
+    } as Response);
+
+    await expect(fetchUser(1)).rejects.toThrow(/not found: 1/i);
+  });
 });
